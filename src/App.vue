@@ -1,7 +1,7 @@
 <template>
 
   <div class="app-container">
-    <mt-header fixed title="固定在顶部"></mt-header>
+    <mt-header fixed title="Vue Demo"></mt-header>
 
 
 		<transition>
@@ -42,7 +42,9 @@
 <style lang="scss" scoped>
 .app-container {
   padding-top: 40px;
-	overflow-x: hidden
+	overflow-x: hidden;
+	background-color: white;
+	padding-bottom: 50px;
 }
 
 .v-enter{
