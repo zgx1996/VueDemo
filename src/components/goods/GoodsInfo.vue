@@ -100,6 +100,10 @@ export default {
         },
         addToCart(){
             this.flag = !this.flag;
+
+            var carData = {id:this.id,count:this.count,price:this.goodsinfo.sell_price,selected:true};
+            this.$store.commit("addToCar",carData);
+
         },
         beforeEnter(el){
             el.style.transform = "translate(0,0)";
