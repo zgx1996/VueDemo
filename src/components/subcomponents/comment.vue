@@ -2,9 +2,9 @@
     <div class="comment-container">
         <h3>发表评论</h3>
         <hr/>
-        <textarea placeholder="请输入评论内容" maxlength="120"></textarea>
+        <textarea placeholder="请输入评论内容" maxlength="120" v-model="msg"></textarea>
 
-        <mt-button type="primary" size="large">发表评论</mt-button>
+        <mt-button type="primary" size="large" @click="postComment">发表评论</mt-button>
 
         <div class="comment-list">
             <div class="comment-item" v-for="(item,i) in commentList" :key="item.add_time">
@@ -30,14 +30,15 @@ import {Toast} from 'mint-ui'
 export default {
     data(){
         return {
+            msg:"",
             pageindex: 1,
             commentList:[]
         }
     },
-    props:['newsinfoid'],
+    props:['id'],
     methods:{
         getComments(){
-            axios.get("http://www.liulongbin.top:3005/api/getComments/" + this.newsinfoid + "?pageindex=" + this.pageindex)
+            axios.get("http://www.liulongbin.top:3005/api/getComments/" + this.id + "?pageindex=" + this.pageindex)
                 .then((response) => {
                     console.log("评论的内容是"+JSON.stringify(response.data));
                     if(response.data.status == "0"){
@@ -46,6 +47,23 @@ export default {
                         Toast("加载评论失败！！！")
                     }
                     
+                })
+        },
+        postComment(){
+            if(this.msg.trim().length === 0){
+                Toast("评论内容不能为空");
+                return ;
+            }
+            axios.post("http://www.liulongbin.top:3005/api/postcomment/" + this.id,{"comment":this.msg})
+                .then(response => {
+                    console.log(response);
+                    const m = this.msg.trim();
+                    if(response.data.status == "0"){
+                        this.commentList.unshift({"user_name":'匿名用户',"add_time":new Date(),"content":m});
+                    }else{
+                        Toast("发表评论失败")
+                    }
+                    this.msg = "";
                 })
         },
         loadNextPage(){
